@@ -5,8 +5,9 @@
     <div class="row">
         <div class="col-sm-12">
 
+            <!-- Top Buttons -->
             <div class="mb-3 d-flex flex-wrap gap-2">
-                <a href="{{ route('posts.trash') }}" class="btn btn-dark">
+                <a href="{{ route('posts.trash') }}" class="btn btn-primary">
                     <i class="fa fa-trash"></i> Trashed Posts
                 </a>
 
@@ -15,6 +16,7 @@
                 </a>
             </div>
 
+            <!-- Posts Card -->
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title mb-0">Posts List</h4>
@@ -34,17 +36,12 @@
 
                             <thead class="table-primary">
                                 <tr>
-                                    <th>#</th>
-                                    <th>Image</th>
                                     <th>Title</th>
-                                    <th>Category</th>
                                     <th>Author</th>
                                     <th>Status</th>
-                                    <th>News Options</th>
                                     <th>Views</th>
-                                    <th>Published</th>
                                     <th>Created</th>
-                                    <th width="170">Action</th>
+                                    <th width="190">Actions</th>
                                 </tr>
                             </thead>
 
@@ -54,31 +51,8 @@
 
                                 <tr>
 
-                                    <td>{{ $loop->iteration }}</td>
-
-                                    <td>
-                                        @if($post->image1)
-                                            <img src="{{ asset('storage/'.$post->image1) }}"
-                                                 width="80"
-                                                 height="60"
-                                                 class="rounded">
-                                        @else
-                                            <span class="text-muted">No Image</span>
-                                        @endif
-                                    </td>
-
-                                    <td>
-                                        <strong>{{ $post->title }}</strong>
-
-                                        <br>
-
-                                        <small class="text-muted">
-                                            {{ \Illuminate\Support\Str::limit(strip_tags($post->excerpt),60) }}
-                                        </small>
-                                    </td>
-
-                                    <td>
-                                        {{ $post->category->name ?? '-' }}
+                                     <td>
+                                        {{ Str::limit($post->title, 15) }}
                                     </td>
 
                                     <td>
@@ -98,55 +72,7 @@
                                     </td>
 
                                     <td>
-
-                                        @if($post->featured)
-                                            <div class="mb-1">
-                                                <span class="badge bg-primary">Featured</span>
-                                            </div>
-                                        @endif
-
-                                        @if($post->breaking_news)
-                                            <div class="mb-1">
-                                                <span class="badge bg-danger">Breaking</span>
-                                            </div>
-                                        @endif
-
-                                        @if($post->headline)
-                                            <div class="mb-1">
-                                                <span class="badge bg-warning text-dark">Headline</span>
-                                            </div>
-                                        @endif
-
-                                        @if($post->slider)
-                                            <div class="mb-1">
-                                                <span class="badge bg-info">Slider</span>
-                                            </div>
-                                        @endif
-
-                                        @if($post->trending)
-                                            <div class="mb-1">
-                                                <span class="badge bg-success">Trending</span>
-                                            </div>
-                                        @endif
-
-                                        @if($post->popular)
-                                            <div>
-                                                <span class="badge bg-dark">Popular</span>
-                                            </div>
-                                        @endif
-
-                                    </td>
-
-                                    <td>
                                         {{ number_format($post->views) }}
-                                    </td>
-
-                                    <td>
-                                        @if($post->published_at)
-                                            {{ $post->published_at->format('d M Y') }}
-                                        @else
-                                            -
-                                        @endif
                                     </td>
 
                                     <td>
@@ -154,8 +80,7 @@
                                     </td>
 
                                     <td>
-
-                                        <div class="d-grid gap-2">
+                                        <div class="d-flex flex-wrap gap-1">
 
                                             {{-- Publish / Unpublish --}}
                                             <form action="{{ route('posts.toggle-status',$post->id) }}" method="POST">
@@ -163,21 +88,14 @@
                                                 @method('PATCH')
 
                                                 @if($post->status == 'published')
-
-                                                    <button type="submit"
-                                                            class="btn btn-secondary btn-sm">
+                                                    <button type="submit" class="btn btn-secondary btn-sm">
                                                         Unpublish
                                                     </button>
-
                                                 @else
-
-                                                    <button type="submit"
-                                                            class="btn btn-success btn-sm">
+                                                    <button type="submit" class="btn btn-success btn-sm">
                                                         Publish
                                                     </button>
-
                                                 @endif
-
                                             </form>
 
                                             {{-- Edit --}}
@@ -190,7 +108,6 @@
                                             <form action="{{ route('posts.destroy',$post->id) }}"
                                                   method="POST"
                                                   onsubmit="return confirm('Move this post to trash?')">
-
                                                 @csrf
                                                 @method('DELETE')
 
@@ -198,11 +115,9 @@
                                                         class="btn btn-danger btn-sm">
                                                     Trash
                                                 </button>
-
                                             </form>
 
                                         </div>
-
                                     </td>
 
                                 </tr>
@@ -210,7 +125,7 @@
                                 @empty
 
                                 <tr>
-                                    <td colspan="11" class="text-center">
+                                    <td colspan="7" class="text-center py-4">
                                         No posts found.
                                     </td>
                                 </tr>
@@ -223,6 +138,7 @@
 
                     </div>
 
+                    <!-- Pagination -->
                     <div class="mt-3">
                         {{ $posts->links() }}
                     </div>
@@ -237,45 +153,195 @@
 <style>
 
 .post-table img{
-    object-fit:cover;
-    border-radius:6px;
+    object-fit: cover;
+    border-radius: 6px;
 }
 
 .badge{
-    font-size:11px;
-    padding:6px 10px;
+    font-size: 11px;
+    padding: 6px 10px;
 }
 
-.d-grid .btn{
-    width:100%;
+.table td,
+.table th{
+    vertical-align: middle;
 }
 
-.table td{
-    vertical-align:middle;
+.card{
+    border-radius: 10px;
 }
+
+.card-header{
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+
+
+.post-table img{
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.badge{
+    font-size: 10px;
+    padding: 4px 8px;
+}
+
+.table td,
+.table th{
+    vertical-align: middle;
+}
+
+.card{
+    border-radius: 10px;
+}
+
+.card-header{
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+/* Small icons */
+.btn i.fa,
+.btn i.fas,
+.btn i.fa-solid{
+    font-size: 10px !important;
+    margin-right: 3px;
+}
+
+/* Small action buttons */
+.post-table .btn-sm{
+    font-size: 11px;
+    padding: 4px 8px;
+}
+
+/* Top buttons */
+.mb-3 .btn{
+    font-size: 12px;
+    padding: 6px 10px;
+}
+
+/* Table styling */
+.post-table th{
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.post-table td{
+    font-size: 12px;
+}
+
+/* Mobile */
+@media(max-width:768px){
+
+    .card-title{
+        font-size: 16px;
+    }
+
+    .table-responsive{
+        overflow-x: auto;
+    }
+
+    .post-table{
+        min-width: 650px;
+        font-size: 11px;
+    }
+
+    .post-table th,
+    .post-table td{
+        white-space: nowrap;
+        padding: 6px;
+    }
+
+    .badge{
+        font-size: 8px;
+        padding: 3px 6px;
+    }
+
+    .btn{
+        font-size: 11px;
+    }
+
+    .post-table .btn-sm{
+        font-size: 10px;
+        padding: 4px 6px;
+    }
+
+    .btn i.fa,
+    .btn i.fas,
+    .btn i.fa-solid{
+        font-size: 8px !important;
+        margin-right: 2px;
+    }
+
+    .mb-3 .btn{
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    .d-flex.gap-1{
+        flex-direction: column;
+    }
+
+    .d-flex.gap-1 .btn{
+        width: 100%;
+    }
+}
+
+/* Very small phones */
+@media(max-width:480px){
+
+    .card-title{
+        font-size: 14px;
+    }
+
+    .post-table{
+        min-width: 600px;
+    }
+
+    .btn i.fa,
+    .btn i.fas,
+    .btn i.fa-solid{
+        font-size: 7px !important;
+    }
+
+    .post-table .btn-sm{
+        font-size: 9px;
+        padding: 3px 5px;
+    }
+}
+
+
 
 @media(max-width:768px){
 
-.post-table{
-    font-size:12px;
-}
+    .post-table{
+        font-size: 12px;
+    }
 
-.post-table th,
-.post-table td{
-    white-space:nowrap;
-    padding:6px;
-}
+    .post-table th,
+    .post-table td{
+        white-space: nowrap;
+        padding: 8px;
+    }
 
-.card-title{
-    font-size:18px;
-}
+    .card-title{
+        font-size: 18px;
+    }
 
-.btn{
-    font-size:12px;
-}
+    .btn{
+        font-size: 12px;
+    }
 
+    .d-flex.gap-1{
+        flex-direction: column;
+    }
+
+    .d-flex.gap-1 .btn{
+        width: 100%;
+    }
 }
 
 </style>
-
 @endsection

@@ -8,86 +8,121 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    // Show all categories
+    /**
+     * Active Categories
+     */
     public function index()
     {
         $categories = Category::latest()->paginate(10);
+
         return view('admin.categories.index', compact('categories'));
     }
 
-    // Show trashed categories
-    public function trash()
-    {
-        $categories = Category::onlyTrashed()->latest()->paginate(10);
-        return view('admin.categories.trash', compact('categories'));
-    }
+    /**
+     * Trashed Categories
+     */
+public function trash()
+{
+    $trashedCategories = Category::onlyTrashed()
+        ->latest('deleted_at')
+        ->paginate(10);
 
-    // Show create form
+    return view('admin.categories.trash', compact('trashedCategories'));
+}
+
+    /**
+     * Create Form
+     */
     public function create()
     {
         return view('admin.categories.create');
     }
 
-    // Store category
+    /**
+     * Store Category
+     */
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|unique:categories,name',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
         ]);
 
-        Category::create($request->all());
+        Category::create([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
 
-        return redirect()->route('admin.categories.index')
+        return redirect()
+            ->route('admin.categories.index')
             ->with('success', 'Category created successfully.');
     }
 
-    // Show edit form
+    /**
+     * Edit Form
+     */
     public function edit(Category $category)
     {
         return view('admin.categories.edit', compact('category'));
     }
 
-    // Update category
+    /**
+     * Update Category
+     */
     public function update(Request $request, Category $category)
     {
         $request->validate([
             'name' => 'required|unique:categories,name,' . $category->id,
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
         ]);
 
-        $category->update($request->all());
+        $category->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
 
-        return redirect()->route('admin.categories.index')
+        return redirect()
+            ->route('admin.categories.index')
             ->with('success', 'Category updated successfully.');
     }
 
-    // Soft delete
+    /**
+     * Move To Trash
+     */
     public function destroy(Category $category)
     {
         $category->delete();
 
-        return redirect()->route('admin.categories.index')
-            ->with('success', 'Category moved to trash.');
+        return redirect()
+            ->route('admin.categories.index')
+            ->with('success', 'Category moved to trash successfully.');
     }
 
-    // Restore category
+    /**
+     * Restore Category
+     */
     public function restore($id)
     {
         $category = Category::onlyTrashed()->findOrFail($id);
+
         $category->restore();
 
-        return redirect()->route('admin.categories.trash')
+        return redirect()
+            ->route('admin.categories.trash')
             ->with('success', 'Category restored successfully.');
     }
 
-    // Force delete
+    /**
+     * Permanently Delete Category
+     */
     public function forceDelete($id)
     {
         $category = Category::onlyTrashed()->findOrFail($id);
+
         $category->forceDelete();
 
-        return redirect()->route('admin.categories.trash')
+        return redirect()
+            ->route('admin.categories.trash')
             ->with('success', 'Category permanently deleted.');
     }
 }

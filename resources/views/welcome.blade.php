@@ -1992,6 +1992,8 @@ body.dark-mode .utf_newsletter_introtext{
        height: 380px;
      }
 
+     
+
      /* View More News */
      .utf_more_news .utf_post_float_half {
        flex-direction: column;
@@ -2014,6 +2016,29 @@ body.dark-mode .utf_newsletter_introtext{
      .widget .utf_post_overaly_style .utf_post_thumb {
        height: 380px;
      }
+
+     /* TRENDING NEWS */
+/* =========================================*/ 
+
+   #utf_post_slide .utf_post_thumb {
+     width: 100%;
+     height: 360px;
+     overflow: hidden;
+     border-radius: 3px;
+   }
+
+   #utf_post_slide .utf_post_thumb img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+   }
+
+   #utf_post_slide .utf_post_title {
+     font-size: 12px;
+     line-height: 19px;
+     font-weight: 400;
+     margin: 12px 0;
+   }
 
      
    }

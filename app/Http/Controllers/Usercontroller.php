@@ -163,7 +163,7 @@ class UserController extends Controller
         })
 
         ->latest()
-        ->paginate(12);
+        ->paginate(10);
 
     return view('search', compact('posts'));
 }

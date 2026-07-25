@@ -120,48 +120,49 @@ Route::middleware(['auth', 'role:super-admin|admin|editor'])->group(function () 
     Route::get('/admin/dashboard', [AdminController::class, 'index'])
         ->name('admin.dashboard');
 
-             // List Posts
-        Route::get('/posts', [PostController::class, 'index'])
-            ->name('posts.index');
+        
+// Posts List
+Route::get('/admin/posts', [PostController::class, 'index'])
+    ->name('posts.index');
 
-        // Create Post Form
-        Route::get('/posts-create', [PostController::class, 'create'])
-            ->name('posts.create');
-
-        // Save Post
-        Route::post('/posts/store', [PostController::class, 'store'])
-            ->name('posts.store');
-
-            Route::get('/posts/trash', [PostController::class, 'trash'])
+// Trashed Posts
+Route::get('/admin/posts/trash', [PostController::class, 'trash'])
     ->name('posts.trash');
 
-        // View Single Post
-        Route::get('/posts/{post}', [PostController::class, 'show'])
-            ->name('posts.show');
+// Create Post
+Route::get('/admin/posts/create', [PostController::class, 'create'])
+    ->name('posts.create');
 
-        // Edit Post Form
-        Route::get('/posts/{post}/edit', [PostController::class, 'edit'])
-            ->name('posts.edit');
+// Store Post
+Route::post('/admin/posts/store', [PostController::class, 'store'])
+    ->name('posts.store');
 
-        // Update Post
-        Route::put('/posts/{post}/update', [PostController::class, 'update'])
-            ->name('posts.update');
+// Restore Post
+Route::post('/admin/posts/{id}/restore', [PostController::class, 'restore'])
+    ->name('posts.restore');
 
-        // Soft Delete
-        Route::delete('/posts/{post}/delete', [PostController::class, 'destroy'])
-            ->name('posts.destroy');
+// Permanently Delete Post
+Route::delete('/admin/posts/{id}/force-delete', [PostController::class, 'forceDelete'])
+    ->name('posts.forceDelete');
 
+// Edit Post
+Route::get('/admin/posts/{post}/edit', [PostController::class, 'edit'])
+    ->name('posts.edit');
 
-        // Restore
-        Route::post('/posts/{id}/restore', [PostController::class, 'restore'])
-            ->name('posts.restore');
+// Update Post
+Route::put('/admin/posts/{post}/update', [PostController::class, 'update'])
+    ->name('posts.update');
 
-        // Permanent Delete
-        Route::delete('/posts/{id}/force-delete', [PostController::class, 'forceDelete'])
-            ->name('posts.forceDelete');
-
-  Route::patch('/posts/{post}/toggle-status', [PostController::class, 'toggleStatus'])
+// Toggle Status
+Route::patch('/admin/posts/{post}/toggle-status', [PostController::class, 'toggleStatus'])
     ->name('posts.toggle-status');
+
+// Soft Delete
+Route::delete('/admin/posts/{post}/delete', [PostController::class, 'destroy'])
+    ->name('posts.destroy');
+
+// View Single Post
+
 
 });
 
@@ -206,33 +207,32 @@ Route::delete('/admin/system/backup/delete/{file}', [BackupController::class, 'd
 
 Route::middleware(['auth', 'role:super-admin|admin'])->group(function () {
 
-    Route::get('/categories', [CategoryController::class, 'index'])
-        ->name('admin.categories.index');
+    Route::get('/admin/categories/trash', [CategoryController::class, 'trash'])
+    ->name('admin.categories.trash');
 
-    Route::get('/categories/create', [CategoryController::class, 'create'])
-        ->name('admin.categories.create');
+Route::get('/admin/categories', [CategoryController::class, 'index'])
+    ->name('admin.categories.index');
 
-    Route::post('/categories', [CategoryController::class, 'store'])
-        ->name('admin.categories.store');
+Route::get('/admin/categories/create', [CategoryController::class, 'create'])
+    ->name('admin.categories.create');
 
-    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])
-        ->name('admin.categories.edit');
+Route::post('/admin/categories', [CategoryController::class, 'store'])
+    ->name('admin.categories.store');
 
-    Route::put('/categories/{category}', [CategoryController::class, 'update'])
-        ->name('admin.categories.update');
+Route::get('/admin/categories/{category}/edit', [CategoryController::class, 'edit'])
+    ->name('admin.categories.edit');
 
-    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])
-        ->name('admin.categories.destroy');
+Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])
+    ->name('admin.categories.update');
 
-    Route::get('/categories/trash', [CategoryController::class, 'trash'])
-        ->name('admin.categories.trash');
+Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])
+    ->name('admin.categories.destroy');
 
-    Route::post('/categories/{id}/restore', [CategoryController::class, 'restore'])
-        ->name('admin.categories.restore');
+Route::post('/admin/categories/{id}/restore', [CategoryController::class, 'restore'])
+    ->name('admin.categories.restore');
 
-    Route::delete('/categories/{id}/force-delete', [CategoryController::class, 'forceDelete'])
-        ->name('admin.categories.forceDelete');
-
+Route::delete('/admin/categories/{id}/force-delete', [CategoryController::class, 'forceDelete'])
+    ->name('admin.categories.forceDelete');
 
          Route::get('/users', [AdminController::class, 'userList'])->name('user.list');
     Route::patch('user/{user}/ban', [AdminController::class, 'ban'])->name('user.ban');
@@ -246,11 +246,11 @@ Route::middleware(['auth', 'role:super-admin|admin'])->group(function () {
     Route::delete('/users/{id}/force-delete', [AdminController::class, 'forceDeleteUser'])->name('user.forceDelete');
 
 
-Route::get('seo-settings', [SeoController::class, 'edit'])->name('admin.seo.edit');
-Route::post('seo-settings', [SeoController::class, 'update'])->name('admin.seo.update');
+Route::get('/admin/seo-settings', [SeoController::class, 'edit'])->name('admin.seo.edit');
+Route::post('/admin/seo-settings', [SeoController::class, 'update'])->name('admin.seo.update');
 
-  Route::get('comments', [AdminController::class, 'comments'])->name('admin.comments');
-    Route::get('subscribers', [AdminController::class, 'subscribers'])->name('admin.subscribers');
+  Route::get('/admin/comments', [AdminController::class, 'comments'])->name('admin.comments');
+    Route::get('/admin/subscribers', [AdminController::class, 'subscribers'])->name('admin.subscribers');
     Route::delete('/admin/comments/{id}', [AdminController::class, 'destroy'])->name('admin.comments.delete');
     Route::delete('/admin/subscribers/{id}', [AdminController::class, 'destroys'])
     ->name('admin.subscribers.delete');

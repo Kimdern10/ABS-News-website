@@ -19,7 +19,7 @@ class PostController extends Controller
     {
         $posts = Post::with(['category', 'user'])
             ->latest()
-            ->paginate(15);
+            ->paginate(10);
 
         return view('admin.posts.index', compact('posts'));
     }
@@ -47,11 +47,8 @@ class PostController extends Controller
             'excerpt' => 'nullable|string',
             'content' => 'required',
 
-            'image1' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'image2' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'image3' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'image4' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'image5' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'images' => 'nullable|array|max:5',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096',
 
             'author_name' => 'nullable|string|max:255',
             'source' => 'nullable|string|max:255',
@@ -86,16 +83,18 @@ class PostController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        for ($i = 1; $i <= 5; $i++) {
+       if ($request->hasFile('images')) {
 
-            if ($request->hasFile("image$i")) {
+    foreach ($request->file('images') as $index => $image) {
 
-                $post["image$i"] = $request->file("image$i")
-                    ->store('posts', 'public');
-
-            }
-
+        if ($index >= 5) {
+            break;
         }
+
+        $post->{'image' . ($index + 1)} =
+            $image->store('posts', 'public');
+    }
+}
 
         /*
         |--------------------------------------------------------------------------
@@ -197,6 +196,9 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|max:255',
             'content' => 'required',
+
+            'images' => 'nullable|array|max:5',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096',
         ]);
 
         $post->category_id = $request->category_id;
@@ -209,22 +211,28 @@ class PostController extends Controller
 
         $post->content = $request->content;
 
-        for ($i = 1; $i <= 5; $i++) {
+       if ($request->hasFile('images')) {
 
-            if ($request->hasFile("image$i")) {
+    for ($i = 1; $i <= 5; $i++) {
 
-                if ($post["image$i"]) {
+        if ($post->{'image'.$i}) {
 
-                    Storage::disk('public')->delete($post["image$i"]);
+            Storage::disk('public')->delete($post->{'image'.$i});
 
-                }
-
-                $post["image$i"] = $request->file("image$i")
-                    ->store('posts', 'public');
-
-            }
-
+            $post->{'image'.$i} = null;
         }
+    }
+
+    foreach ($request->file('images') as $index => $image) {
+
+        if ($index >= 5) {
+            break;
+        }
+
+        $post->{'image'.($index + 1)} =
+            $image->store('posts', 'public');
+    }
+}
 
         $post->featured = $request->boolean('featured');
         $post->breaking_news = $request->boolean('breaking_news');
@@ -269,22 +277,21 @@ class PostController extends Controller
     /**
      * Delete post
      */
-    public function destroy(Post $post)
-    {
-        for ($i = 1; $i <= 5; $i++) {
+ public function destroy(Post $post)
+{
+    for ($i = 1; $i <= 5; $i++) {
 
-            if ($post["image$i"]) {
+        $image = $post->{'image' . $i};
 
-                Storage::disk('public')->delete($post["image$i"]);
-
-            }
-
+        if ($image) {
+            Storage::disk('public')->delete($image);
         }
-
-        $post->delete();
-
-        return back()->with('success', 'Post deleted successfully.');
     }
+
+    $post->delete();
+
+    return back()->with('success', 'Post deleted successfully.');
+}
 
     public function toggleStatus(Post $post)
 {
@@ -311,7 +318,7 @@ public function trash()
     $posts = Post::onlyTrashed()
         ->with(['category', 'user'])
         ->latest()
-        ->paginate(15);
+        ->paginate(10);
 
     return view('admin.posts.trash', compact('posts'));
 }
@@ -346,5 +353,7 @@ public function headlines()
 
     return view('admin.news.headlines', compact('message'));
 }
+
+
 
 }

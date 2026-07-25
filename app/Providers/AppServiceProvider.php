@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
             ->where('status', 'published')
             ->where('breaking_news', 1)
             ->latest()
-            ->take(10)
+            ->take(6)
             ->get();
 
         // Trending News
@@ -65,7 +65,7 @@ class AppServiceProvider extends ServiceProvider
 
             $viewMoreNews = Post::with(['category', 'user'])
             ->where('status', 'published')
-            ->take(8)
+            ->take(5)
             ->get();
 
             // Slider News

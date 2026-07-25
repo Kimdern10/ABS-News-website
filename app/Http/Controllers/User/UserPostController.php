@@ -21,7 +21,7 @@ class UserPostController extends Controller
         ->where('category_id', $category->id)
         ->where('status', 'published')
         ->latest()
-        ->paginate(8);
+        ->paginate(10);
 
     // Categories
     $allCategories = Category::withCount('posts')->get();

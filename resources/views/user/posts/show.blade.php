@@ -908,9 +908,9 @@ RELATED POSTS
 }
 
 .related-posts .utf_post_title {
-    font-size: 12px;
-    line-height: 18px;
-    margin-top: 10px;
+    font-size: 10px;
+    line-height: 14px;
+    margin-top: 8px;
 }
 
 .related-posts .utf_post_meta {

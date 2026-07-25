@@ -81,96 +81,39 @@
 
     <hr>
 
-    <h5>Post Images</h5>
+   <hr>
 
-    <div class="row">
+<h5>Post Images</h5>
 
-        {{-- Image 1 --}}
-        <div class="col-md-6 mb-3">
+<div class="row">
 
-            <label>Image 1</label>
+    @for($i = 1; $i <= 5; $i++)
+        @if($post->{'image'.$i})
+            <div class="col-md-2 mb-3">
+                <img src="{{ asset('storage/'.$post->{'image'.$i}) }}"
+                     class="img-fluid rounded border"
+                     style="height:120px; object-fit:cover;">
+            </div>
+        @endif
+    @endfor
 
-            @if($post->image1)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/'.$post->image1) }}"
-                         width="120"
-                         class="rounded border">
-                </div>
-            @endif
+</div>
 
-            <input type="file" name="image1" class="form-control">
+<div class="mb-3">
+    <label class="form-label">
+        Select New Images (Max 5)
+    </label>
 
-        </div>
+    <input type="file"
+           name="images[]"
+           class="form-control"
+           multiple
+           accept="image/*">
 
-        {{-- Image 2 --}}
-        <div class="col-md-6 mb-3">
-
-            <label>Image 2</label>
-
-            @if($post->image2)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/'.$post->image2) }}"
-                         width="120"
-                         class="rounded border">
-                </div>
-            @endif
-
-            <input type="file" name="image2" class="form-control">
-
-        </div>
-
-        {{-- Image 3 --}}
-        <div class="col-md-6 mb-3">
-
-            <label>Image 3</label>
-
-            @if($post->image3)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/'.$post->image3) }}"
-                         width="120"
-                         class="rounded border">
-                </div>
-            @endif
-
-            <input type="file" name="image3" class="form-control">
-
-        </div>
-
-        {{-- Image 4 --}}
-        <div class="col-md-6 mb-3">
-
-            <label>Image 4</label>
-
-            @if($post->image4)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/'.$post->image4) }}"
-                         width="120"
-                         class="rounded border">
-                </div>
-            @endif
-
-            <input type="file" name="image4" class="form-control">
-
-        </div>
-
-        {{-- Image 5 --}}
-        <div class="col-md-6 mb-3">
-
-            <label>Image 5</label>
-
-            @if($post->image5)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/'.$post->image5) }}"
-                         width="120"
-                         class="rounded border">
-                </div>
-            @endif
-
-            <input type="file" name="image5" class="form-control">
-
-        </div>
-
-    </div>
+    <small class="text-muted">
+        Selecting new images will replace all existing images.
+    </small>
+</div>
 
     <hr>
 

@@ -47,7 +47,9 @@
                                 ABS has remained one of the most trusted sources of news and public information.
                                 The station operates ABS FM 88.5 in Awka, ABS FM 90.7 in Onitsha,
                                 ABS TV Channel 24 in Awka, and ABS TV Channel 27 in Onitsha,
-                                reaching audiences through terrestrial and satellite broadcasting.
+                                and satellite broadcasting on NigComSat: Channel Frequency 2,  Frequency: 12.731 GHz, 
+                                Polarization: Horizontal (H) Symbol Rate: 26250 KBPS
+
                             </p>
 
                             <p>

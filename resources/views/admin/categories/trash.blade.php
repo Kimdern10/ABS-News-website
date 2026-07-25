@@ -5,7 +5,6 @@
     <div class="row">
         <div class="col-sm-12">
 
-            <!-- Links -->
             <div class="mb-3">
                 <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">
                     ← Back to Categories List
@@ -13,15 +12,12 @@
             </div>
 
             <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="header-title">
-                        <h4 class="card-title">Deleted Categories</h4>
-                    </div>
+                <div class="card-header">
+                    <h4 class="card-title">Deleted Categories</h4>
                 </div>
 
                 <div class="card-body">
 
-                    {{-- Success Message --}}
                     @if(session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
@@ -29,80 +25,69 @@
                     @endif
 
                     <div class="table-responsive">
-                        <table class="table table-bordered mb-0 trashed-category-table">
+                        <table class="table table-bordered">
                             <thead>
-                                <tr class="bg-white">
-                                    <th class="bg-primary text-white">#</th>
-                                    <th class="bg-primary text-white">Name</th>
-                                    <th class="bg-primary text-white">Description</th>
-                                    <th class="bg-primary text-white">Deleted At</th>
-                                    <th class="bg-primary text-white">Action</th>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Deleted At</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @forelse($categories as $category)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                @forelse($trashedCategories as $category)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
 
-                                    {{-- Name --}}
-                                    <td>{{ $category->name }}</td>
+                                        <td>{{ $category->name }}</td>
 
-                                    {{-- Description --}}
-                                    <td>{{ Str::limit($category->description, 50) ?? '—' }}</td>
+                                        <td>
+                                            {{ $category->description ? Str::limit($category->description, 50) : '—' }}
+                                        </td>
 
-                                    {{-- Deleted Date --}}
-                                    <td>
-                                        @if($category->deleted_at)
-                                            {{ $category->deleted_at->format('j F, Y h:i A') }}
-                                        @else
-                                            <span class="text-muted">—</span>
-                                        @endif
-                                    </td>
+                                        <td>
+                                            {{ optional($category->deleted_at)->format('d M Y h:i A') }}
+                                        </td>
 
-                                    {{-- Actions --}}
-                                    <td>
-                                        <div class="d-flex gap-2 align-items-center">
-                                            
-                                          <form action="{{ route('admin.categories.restore', $category->id) }}" method="POST">
-    @csrf
-    <button type="submit" class="btn btn-sm btn-success">
-        Restore
-    </button>
-</form>
+                                        <td>
+                                            <div class="d-flex gap-2">
 
-                                            {{-- Force Delete --}}
-                                            <form action="{{ route('admin.categories.forceDelete', $category->id) }}"
-                                                  method="POST"
-                                                  onsubmit="return confirm('Are you sure you want to permanently delete this category?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="btn btn-danger btn-sm">
-                                                    Delete Permanently
-                                                </button>
-                                            </form>
+                                                <form action="{{ route('admin.categories.restore', $category->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-success btn-sm">
+                                                        Restore
+                                                    </button>
+                                                </form>
 
-                                        </div>
-                                    </td>
-                                </tr>
+                                                <form action="{{ route('admin.categories.forceDelete', $category->id) }}"
+                                                      method="POST"
+                                                      onsubmit="return confirm('Permanently delete this category?');">
+                                                    @csrf
+                                                    @method('DELETE')
 
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        Delete Permanently
+                                                    </button>
+                                                </form>
+
+                                            </div>
+                                        </td>
+                                    </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="6" class="text-center text-danger">
-                                        No deleted categories found
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-center text-danger">
+                                            No deleted categories found
+                                        </td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
 
-                        <!-- Pagination -->
-                        @if(method_exists($categories, 'links'))
-                            <div class="mt-3 d-flex justify-content-center">
-                                {{ $categories->links() }}
-                            </div>
-                        @endif
+                        <div class="mt-3">
+                            {{ $trashedCategories->links() }}
+                        </div>
 
                     </div>
                 </div>
@@ -111,6 +96,7 @@
         </div>
     </div>
 </div>
+
 
 {{-- Custom CSS for responsiveness --}}
 <style>

@@ -61,36 +61,21 @@
 
     <hr>
 
-    <h5>Post Images</h5>
+   <hr>
 
-    <div class="row">
+<h5>Post Images (Maximum 5)</h5>
 
-        <div class="col-md-6 mb-3">
-            <label>Image 1</label>
-            <input type="file" name="image1" class="form-control">
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label>Image 2</label>
-            <input type="file" name="image2" class="form-control">
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label>Image 3</label>
-            <input type="file" name="image3" class="form-control">
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label>Image 4</label>
-            <input type="file" name="image4" class="form-control">
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label>Image 5</label>
-            <input type="file" name="image5" class="form-control">
-        </div>
-
-    </div>
+<div class="mb-3">
+    <label>Select Images</label>
+    <input type="file"
+           name="images[]"
+           class="form-control"
+           multiple
+           accept="image/*">
+    <small class="text-muted">
+        You can select up to 5 images at once.
+    </small>
+</div>
 
     <hr>
 
