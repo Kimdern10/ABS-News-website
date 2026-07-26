@@ -64,6 +64,8 @@ class PermissionSeeder extends Seeder
             // Radio
             'manage radio',
 
+            'manage youtube live',
+
             // SEO
             'manage seo',
 

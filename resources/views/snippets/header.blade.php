@@ -4,8 +4,13 @@
 
       <!-- Radio Button at Top-Most Left -->
       <div class="col-lg-1 col-2 d-none d-lg-flex align-items-center">
-        <a href="#" class="nav-link radio-btn" style="font-size: 1.6rem; padding: 8px;">
+        <a href="#"
+          id="radioToggle"
+          class="nav-link radio-btn"
+          style="font-size:1.6rem;padding:8px;">
+
           <i class="fa fa-broadcast-tower"></i>
+
         </a>
       </div>
 
@@ -17,8 +22,8 @@
       </div>
 
       @php
-      $navbarCategories = $categories->take(3);
-      $pageCategories = $categories->slice(3);
+      $navbarCategories = $categories->take(4);
+      $pageCategories = $categories->slice(4);
       @endphp
 
       <nav class="navbar navbar-expand-lg col-lg-7 col-12">
@@ -50,12 +55,15 @@
             </li>
 
 
-            <!-- Live News -->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="fa fa-bolt"></i>
-                Live News
-                <span class="badge badge-danger">LIVE</span>
+            <!-- Mobile Live Radio -->
+            <li class="nav-item d-lg-none">
+              <a href="#"
+                id="mobileRadioToggle"
+                class="nav-link">
+
+                <i class="fa fa-broadcast-tower text-danger"></i>
+                <span class="ml-2">🔴 Live Radio</span>
+
               </a>
             </li>
 
@@ -106,7 +114,7 @@
 
                 <!-- Eye Witnesses -->
                 <li>
-                  <a href="#">
+                  <a href="{{ route('eyewitness.news') }}">
                     Eye Witnesses
                   </a>
                 </li>
@@ -145,47 +153,36 @@
           <i class="fa-solid fa-moon" id="darkModeIcon"></i>
         </button>
 
-        <!-- Search -->
-        <!-- Search Button -->
-        <button class="header-icon-btn mr-2" id="searchBtn">
-          <i class="fa fa-search"></i>
-        </button>
+<!-- Search -->
+<button class="header-icon-btn mr-2" id="searchBtn">
+    <i class="fa fa-search"></i>
+</button>
 
-        <!-- Search Popup -->
-        <div class="utf_search_block" id="searchBox">
 
-          <span class="utf_search_close">&times;</span>
+<!-- Search Popup -->
+<div class="utf_search_block" id="searchBox">
 
-          <form action="{{ route('search') }}" method="GET">
+    <span class="utf_search_close">&times;</span>
 
-            <div class="mb-3">
-              <input type="text"
+    <form action="{{ route('search') }}" method="GET">
+
+        <div class="mb-3">
+            <input type="text"
                 name="keyword"
                 class="form-control"
                 placeholder="Search news..."
                 required>
-            </div>
-
-            <div class="mb-3">
-              <select name="category" class="form-control">
-                <option value="">All Categories</option>
-
-                @foreach($categories as $category)
-                <option value="{{ $category->slug }}">
-                  {{ $category->name }}
-                </option>
-                @endforeach
-
-              </select>
-            </div>
-
-            <button type="submit" class="btn btn-danger w-100">
-              <i class="fa fa-search"></i> Search
-            </button>
-
-          </form>
-
         </div>
+
+
+        <button type="submit" class="btn btn-danger w-100">
+            <i class="fa fa-search"></i> Search
+        </button>
+
+    </form>
+
+</div>
+
         <!-- User Profile Icon -->
         <div class="dropdown profile-dropdown">
 
@@ -267,74 +264,186 @@
 
     </div>
   </div>
-  </div>
-  
+</div>
 
-  <!-- Live News + Eye Witnesses + Recent Video Bar -->
- <div class="live-news-bar py-2">
-    <div class="container">
-      <div class="row align-items-center">
 
-        <!-- Live News -->
-        <div class="col-lg-5 col-md-6">
-          <div class="d-flex align-items-center">
-            <span class="badge badge-danger mr-2">LIVE</span>
-            <span class="text-danger font-weight-bold">Breaking: Major incident reported in downtown area</span>
-            <small class="ml-2 text-muted">2 mins ago</small>
-          </div>
+<!-- Live News + Eye Witnesses + Recent Video Bar -->
+<div class="live-news-bar py-2">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- Live News -->
+      <div class="col-lg-5 col-md-6">
+
+        @if($liveNews)
+
+        <div class="d-flex align-items-center">
+
+          <span class="badge badge-danger mr-2">
+            🔴 LIVE NEWS
+          </span>
+
+          <a href="{{ route('live-news.show', $liveNews->slug) }}"
+            class="text-danger font-weight-bold">
+
+            {{ Str::limit($liveNews->title, 60) }}
+
+          </a>
+
+          <small class="ml-2 text-muted">
+            {{ $liveNews->created_at->format('M d, Y h:i A') }}
+          </small>
+
         </div>
 
-        <!-- Eye Witnesses -->
-        <div class="col-lg-4 col-md-6">
-          <div class="d-flex align-items-center">
-            <div class="small-video-thumb mr-2" style="position:relative; width:80px;">
-              <img src="{{ asset('assets/images/news/lifestyle/food1.jpg') }}" class="img-fluid" alt="">
-              <span class="play-icon" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; font-size:1.2rem;">
-                <i class="fa fa-play"></i>
-              </span>
-            </div>
-            <div>
-              <strong>Eye Witness:</strong> Moment of explosion<br>
-              <small class="text-muted">Posted by John D. • 10 mins ago</small>
-            </div>
+        @endif
+
+      </div>
+
+      <!-- Eye Witnesses -->
+      <div class="col-lg-4 col-md-6">
+
+        @if($latestEyewitnessHeader)
+
+        <div class="d-flex align-items-center">
+
+          <div class="small-video-thumb mr-2"
+            style="position:relative; width:80px;">
+
+            <a href="{{ route('eyewitness.show', $latestEyewitnessHeader->id) }}">
+
+              @if($latestEyewitnessHeader->image)
+
+              <img src="{{ asset('storage/'.$latestEyewitnessHeader->image) }}"
+                class="img-fluid"
+                alt="{{ $latestEyewitnessHeader->title }}"
+                style="width:80px;height:60px;object-fit:cover;">
+
+              @else
+
+              <img src="{{ asset('assets/images/no-image.jpg') }}"
+                class="img-fluid"
+                alt="No Image"
+                style="width:80px;height:60px;object-fit:cover;">
+
+              @endif
+
+            </a>
+
           </div>
+
+          <div>
+
+            <strong>Eye Witness:</strong>
+
+            <a href="{{ route('eyewitness.show', $latestEyewitnessHeader->id) }}"
+              class="text-dark">
+
+              {{ \Illuminate\Support\Str::limit($latestEyewitnessHeader->title, 25) }}
+
+            </a>
+
+            <br>
+
+            <small class="text-muted">
+
+              Posted by {{ $latestEyewitnessHeader->user->name ?? 'Anonymous' }}
+
+              •
+
+              {{ $latestEyewitnessHeader->created_at->diffForHumans() }}
+
+            </small>
+
+          </div>
+
         </div>
+
+        @else
+
+        <p class="text-muted">No eyewitness reports available.</p>
+
+        @endif
+
+      </div>
 
 
 
       <!-- Recent Video -->
-<div class="col-lg-3 col-md-12 mt-2 mt-md-0">
-    <div class="small-video-box d-flex align-items-center">
+      <div class="col-lg-3 col-md-12 mt-2 mt-md-0">
 
-        <div class="small-video-thumb mr-2">
-            <img src="{{ asset('assets/images/news/lifestyle/food1.jpg') }}"
-                 class="img-fluid"
-                 alt="">
+        @if($youtubeLive)
 
+        <div id="openLivePlayer"
+          class="small-video-box d-flex align-items-center"
+          style="cursor:pointer;">
+
+          <!-- Thumbnail -->
+          <div class="small-video-thumb mr-3 position-relative">
+
+            <img src="{{ asset('storage/'.$youtubeLive->thumbnail) }}"
+              class="img-fluid rounded"
+              alt="{{ $youtubeLive->title }}">
+
+            <!-- Play Icon -->
             <span class="play-icon">
-                <i class="fa fa-play"></i>
+              <i class="fa fa-play"></i>
             </span>
+
+          </div>
+
+          <!-- Details -->
+          <div class="flex-grow-1">
+
+            <small class="font-weight-bold d-block mb-1">
+              {{ $youtubeLive->title }}
+            </small>
+
+            <div class="d-flex align-items-center">
+
+              <span class="badge badge-danger mr-2">
+                🔴 LIVE
+              </span>
+
+              <i class="fab fa-youtube text-danger mr-1"
+                style="font-size:18px;"></i>
+
+              <span class="text-danger font-weight-bold">
+                YouTube
+              </span>
+
+            </div>
+
+          </div>
+
         </div>
 
-        <div>
-            <small>Huge fire in city market</small><br>
-            <span class="badge badge-danger">YouTube</span>
+        @else
+
+        <div class="small-video-box d-flex align-items-center p-3">
+
+          <div class="flex-grow-1 text-center">
+
+            <i class="fab fa-youtube text-danger"
+              style="font-size:30px;"></i>
+
+            <p class="mb-0 mt-2 font-weight-bold">
+              No Live Stream Now
+            </p>
+
+          </div>
+
         </div>
+
+        @endif
+
+      </div>
 
     </div>
+  </div>
 </div>
 
-</div>
-</div>
-</div>
 
-<!-- Search Block -->
-<div class="utf_search_block" style="display:none;">
-    <input type="text"
-           class="form-control"
-           placeholder="Enter your keywords...">
-    <span class="utf_search_close">&times;</span>
-</div>
 
 <style>
   /* ====================== DARK MODE ====================== */
@@ -635,83 +744,83 @@
   /* =====================================
    PROFILE ICON DARK MODE
 ===================================== */
-/* ===================================
+  /* ===================================
    LIVE NEWS BAR
 =================================== */
 
-.live-news-bar{
-    background:#1e1e1e;
-    border-top:1px solid #333;
-    padding:12px 0;
-}
+  .live-news-bar {
+    background: #1e1e1e;
+    border-top: 1px solid #333;
+    padding: 12px 0;
+  }
 
-.live-news-bar .row{
-    align-items:center;
-}
+  .live-news-bar .row {
+    align-items: center;
+  }
 
-.live-news-bar .col-lg-5,
-.live-news-bar .col-lg-4,
-.live-news-bar .col-lg-3{
-    margin-bottom:0;
-}
+  .live-news-bar .col-lg-5,
+  .live-news-bar .col-lg-4,
+  .live-news-bar .col-lg-3 {
+    margin-bottom: 0;
+  }
 
-.small-video-thumb{
-    position:relative;
-    width:80px;
-    min-width:80px;
-}
+  .small-video-thumb {
+    position: relative;
+    width: 80px;
+    min-width: 80px;
+  }
 
-.small-video-thumb img{
-    width:80px;
-    height:60px;
-    object-fit:cover;
-    border-radius:5px;
-}
+  .small-video-thumb img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
 
-.play-icon{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    color:#fff;
-    font-size:14px;
-}
+  .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 14px;
+  }
 
-.live-news-bar strong,
-.live-news-bar small,
-.live-news-bar span{
-    color:#fff;
-}
+  .live-news-bar strong,
+  .live-news-bar small,
+  .live-news-bar span {
+    color: #fff;
+  }
 
-.live-news-bar .text-muted{
-    color:#ccc !important;
-}
+  .live-news-bar .text-muted {
+    color: #ccc !important;
+  }
 
-@media(max-width:991px){
-
-    .live-news-bar .col-lg-5,
-    .live-news-bar .col-lg-4,
-    .live-news-bar .col-lg-3{
-        margin-bottom:10px;
-    }
-
-}
-
-@media(max-width:767px){
-
-    .live-news-bar .row{
-        display:block;
-    }
+  @media(max-width:991px) {
 
     .live-news-bar .col-lg-5,
     .live-news-bar .col-lg-4,
-    .live-news-bar .col-lg-3{
-        width:100%;
-        max-width:100%;
-        margin-bottom:12px;
+    .live-news-bar .col-lg-3 {
+      margin-bottom: 10px;
     }
 
-}
+  }
+
+  @media(max-width:767px) {
+
+    .live-news-bar .row {
+      display: block;
+    }
+
+    .live-news-bar .col-lg-5,
+    .live-news-bar .col-lg-4,
+    .live-news-bar .col-lg-3 {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 12px;
+    }
+
+  }
 
 
   /* MOBILE HEADER */
@@ -770,11 +879,11 @@
     }
 
     /* Navbar takes no space */
-       .navbar {
-        position: static;
-        flex: 1 1 100%;
-        width: 100%;
-        max-width: 100%;
+    .navbar {
+      position: static;
+      flex: 1 1 100%;
+      width: 100%;
+      max-width: 100%;
     }
 
     /* Dropdown menu */
@@ -782,36 +891,36 @@
       position: static;
     }
 
-      .navbar-collapse {
-        position: absolute !important;
-        top: 70px;
-        left: 0;
-        right: 0;
-        width: 100vw !important;
-        max-width: 100vw !important;
+    .navbar-collapse {
+      position: absolute !important;
+      top: 70px;
+      left: 0;
+      right: 0;
+      width: 100vw !important;
+      max-width: 100vw !important;
 
-        background: #fff;
-        z-index: 99999;
+      background: #fff;
+      z-index: 99999;
 
-        padding: 15px;
-        border-top: 1px solid #eee;
+      padding: 15px;
+      border-top: 1px solid #eee;
 
-        max-height: calc(100vh - 70px);
-        overflow-y: auto;
+      max-height: calc(100vh - 70px);
+      overflow-y: auto;
 
-        box-sizing: border-box;
+      box-sizing: border-box;
     }
 
-      .navbar-nav,
+    .navbar-nav,
     .navbar-nav .nav-item,
     .navbar-nav .nav-link {
-        width: 100%;
-        display: block;
-        
+      width: 100%;
+      display: block;
+
     }
 
     .navbar-nav .nav-link {
-        padding: 14px 15px;
+      padding: 14px 15px;
     }
 
     .navbar-nav {
@@ -940,6 +1049,7 @@
       z-index: 99999;
       box-shadow: 0 5px 20px rgba(0, 0, 0, .3);
     }
+    
   }
 
   @media (max-width:575.98px) {
@@ -1042,6 +1152,37 @@
       font-size: 24px;
     }
 
+    .utf_search_block {
+        width: calc(100% - 30px);
+        max-width: 100%;
+        padding: 25px;
+        left: 50%;
+        top: 50%;
+        border-radius: 10px;
+    }
+
+
+    .utf_search_block input {
+        width: 100%;
+        height: 55px;
+        font-size: 16px;
+        padding: 10px 15px;
+    }
+
+
+    .utf_search_block .btn {
+        width: 100%;
+        height: 55px;
+        font-size: 16px;
+    }
+
+
+    .utf_search_close {
+        top: 10px;
+        right: 15px;
+        font-size: 28px;
+    }
+
   }
 
   /* ==================== Small Mobile ==================== */
@@ -1059,12 +1200,29 @@
     }
 
     .utf_search_block .btn {
-      height: 42px;
+      height: 22px;
       font-size: 14px;
     }
 
     .utf_search_close {
       font-size: 22px;
+    }
+
+      .utf_search_block {
+        width: calc(100% - 20px);
+        padding: 20px;
+    }
+
+
+    .utf_search_block input {
+        height: 300px;
+        font-size: 15px;
+    }
+
+
+    .utf_search_block .btn {
+        height: 30px;
+        font-size: 15px;
     }
 
   }

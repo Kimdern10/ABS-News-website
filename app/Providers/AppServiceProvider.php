@@ -6,6 +6,10 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Pagination\Paginator;
 use App\Models\Category;
+use App\Models\LiveNews;
+use App\Models\YoutubeLive;
+use App\Models\Eyewitness;
+use App\Models\RadioStream;
 use App\Models\Post;
 
 class AppServiceProvider extends ServiceProvider
@@ -77,6 +81,25 @@ $sliderNews = Post::with(['category','user'])
     ->take(6)
     ->get();
 
+    $liveNews = LiveNews::where('status', 1)
+    ->where('is_live', 1)
+    ->latest()
+    ->first();
+
+    $youtubeLive = YoutubeLive::where('status',1)
+    ->where('is_live',1)
+    ->latest()
+    ->first();
+
+    $radioStream = RadioStream::where('status',1)
+    ->where('is_live',1)
+    ->latest()
+    ->first();
+    
+$latestEyewitnessHeader = Eyewitness::with('user')
+    ->where('status', 'approved')
+    ->latest()
+    ->first();
 
 // Hot News (right side)
 $hotNews = Post::with(['category','user'])
@@ -120,6 +143,10 @@ $hotNews = Post::with(['category','user'])
             'viewMoreNews'     => $viewMoreNews,
             'sliderNews'       => $sliderNews,
             'hotNews'          => $hotNews,
+            'liveNews' => $liveNews,
+            'youtubeLive' => $youtubeLive,
+            'radioStream' => $radioStream,
+            'latestEyewitnessHeader' => $latestEyewitnessHeader,
 
             // Homepage Categories
             'firstCategory'    => $firstCategory,

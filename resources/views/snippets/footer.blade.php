@@ -27,7 +27,7 @@
 
             <li>
               <i class="fa fa-television"></i>
-              ABS TV Channel 24 (Awka) | Channel 27 (Onitsha)
+              ABS TV Channel 24 (Awka) | Channel 27 (Onitsha), NigComSat: Channel Frequency 2, Frequency: 12.731 GHz, Polarization: Horizontal (H) Symbol Rate: 26250 KBPS
             </li>
 
             <li>

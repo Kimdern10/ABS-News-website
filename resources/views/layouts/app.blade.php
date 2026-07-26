@@ -315,6 +315,7 @@ body > .page-loader.hidden {
   @yield('content')
   <!-- Ad Content Area End -->
   
+  
 <!-- Footer Start -->  
  @include('snippets.footer')
 <!-- Footer End -->
@@ -323,7 +324,107 @@ body > .page-loader.hidden {
 
 <!-- Copyright End -->
 </div>
+
+
   <style>/* ================== SMOOTH SLIDING BREAKING NEWS ================== */
+
+#radioPlayer{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:320px;
+    background:#fff;
+    box-shadow:0 0 15px rgba(0,0,0,.2);
+    border-radius:10px;
+    z-index:99999;
+    display:none;
+}
+
+.radio-header{
+    background:#dc3545;
+    color:#fff;
+    padding:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-radius:10px 10px 0 0;
+}
+
+.radio-body{
+    padding:15px;
+}
+
+.radio-body audio{
+    width:100%;
+    margin-top:10px;
+}
+
+#closeRadio{
+    background:none;
+    border:none;
+    color:#fff;
+    font-size:20px;
+    cursor:pointer;
+}
+
+
+.floating-player{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:360px;
+    background:#000;
+    border-radius:12px;
+    overflow:hidden;
+    z-index:999999;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+.player-header{
+    background:#d60000;
+    color:#fff;
+    padding:10px 15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-weight:bold;
+}
+
+.player-header button{
+    background:none;
+    border:none;
+    color:#fff;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.floating-player iframe{
+    width:100%;
+    height:220px;
+    border:0;
+}
+
+.restore-player{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#d60000;
+    color:#fff;
+    padding:12px 20px;
+    border-radius:40px;
+    display:none;
+    cursor:pointer;
+    z-index:999999;
+}
+
+@media(max-width:768px){
+
+    .floating-player{
+        width:95%;
+        right:2.5%;
+    }
+
+}
 
 /* ================= BREAKING NEWS ================= */
 
@@ -512,7 +613,75 @@ body > .page-loader.hidden {
 <script src="{{ asset('assets/js/smoothscroll.js') }}"></script> 
 <script src="{{ asset('assets/js/custom_script.js') }}"></script> 
 
+
+
+@if($radioStream)
+
+<div id="radioPlayer">
+
+    <div class="radio-header">
+
+        <span>🔴 LIVE RADIO</span>
+
+        <button id="closeRadio">
+            ×
+        </button>
+
+    </div>
+
+    <div class="radio-body">
+
+        <strong>{{ $radioStream->title }}</strong>
+
+        <audio controls autoplay>
+            <source src="{{ $radioStream->stream_url }}">
+            Your browser does not support audio.
+        </audio>
+
+    </div>
+
+</div>
+
+@endif
+
+<div id="floatingPlayer" class="floating-player" style="display:none;">
+
+    <div class="player-header">
+
+        <span>🔴 LIVE TV</span>
+
+        <div>
+            <button id="minimizePlayer">
+                <i class="fa fa-minus"></i>
+            </button>
+
+            <button id="closePlayer">
+                ×
+            </button>
+        </div>
+
+    </div>
+
+    <iframe
+        id="liveFrame"
+        src=""
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+    </iframe>
+
+</div>
+
+<div id="restorePlayer"
+     class="restore-player"
+     style="display:none;">
+
+    <i class="fa fa-play"></i>
+    LIVE TV
+
+</div>
+
 <script>
+
 window.addEventListener("load", function(){
 
     const loader = document.querySelector(".page-loader");
@@ -545,7 +714,113 @@ function toggleDarkMode() {
     }
 }
 
+const radioBtn = document.getElementById('radioToggle');
+const mobileRadioBtn = document.getElementById('mobileRadioToggle');
+
+const radioPlayer = document.getElementById('radioPlayer');
+const closeRadio = document.getElementById('closeRadio');
+
+function openRadio(e) {
+
+    e.preventDefault();
+
+    radioPlayer.style.display = 'block';
+
+}
+
+if (radioBtn) {
+
+    radioBtn.addEventListener('click', openRadio);
+
+}
+
+if (mobileRadioBtn) {
+
+    mobileRadioBtn.addEventListener('click', openRadio);
+
+}
+
+if (closeRadio) {
+
+    closeRadio.addEventListener('click', function () {
+
+        radioPlayer.style.display = 'none';
+
+    });
+
+}
+const youtubeUrl = "{{ $youtubeLive?->youtube_url ?? '' }}";
+
+const openBtn = document.getElementById('openLivePlayer');
+const player = document.getElementById('floatingPlayer');
+const frame = document.getElementById('liveFrame');
+const restore = document.getElementById('restorePlayer');
+const minimizeBtn = document.getElementById('minimizePlayer');
+const closeBtn = document.getElementById('closePlayer');
+
+if (openBtn) {
+
+    openBtn.addEventListener('click', function () {
+
+        if (!youtubeUrl) {
+            alert('No Live Stream Available');
+            return;
+        }
+
+        let embedUrl = youtubeUrl;
+
+        if (youtubeUrl.includes('watch?v=')) {
+
+            const videoId = youtubeUrl.split('v=')[1].split('&')[0];
+
+            embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+
+        }
+
+        player.style.display = 'block';
+        restore.style.display = 'none';
+        frame.src = embedUrl;
+
+    });
+
+}
+
+if (minimizeBtn) {
+
+    minimizeBtn.addEventListener('click', function () {
+
+        player.style.display = 'none';
+        restore.style.display = 'block';
+
+    });
+
+}
+
+if (restore) {
+
+    restore.addEventListener('click', function () {
+
+        player.style.display = 'block';
+        restore.style.display = 'none';
+
+    });
+
+}
+
+if (closeBtn) {
+
+    closeBtn.addEventListener('click', function () {
+
+        player.style.display = 'none';
+        restore.style.display = 'none';
+        frame.src = '';
+
+    });
+
+}
+
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 <!-- Mirrored from utouchdesign.com/themes/envato/altroznews/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Jul 2026 14:46:32 GMT -->

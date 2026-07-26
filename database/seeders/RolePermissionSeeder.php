@@ -42,6 +42,7 @@ class RolePermissionSeeder extends Seeder
             'manage radio',
             'manage seo',
             'view analytics',
+            'manage youtube live',
         ]);
 
         // Editor

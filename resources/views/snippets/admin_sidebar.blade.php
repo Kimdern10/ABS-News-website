@@ -123,6 +123,144 @@
 
                 @endhasanyrole
 
+                @can('manage live news')
+
+<li class="nav-item static-item mt-3 mb-1">
+    <a class="nav-link static-item disabled">
+        <span class="default-icon">Live News</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.live-news.index') }}">
+        <i class="ph-duotone ph-broadcast"></i>
+        <span class="item-name">All Live News</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('live-news.create') }}">
+        <i class="ph-duotone ph-plus-circle"></i>
+        <span class="item-name">Add Live News</span>
+    </a>
+</li>
+
+@endcan
+
+@can('manage youtube live')
+
+<li class="nav-item static-item mt-3 mb-1">
+    <a class="nav-link static-item disabled">
+        <span class="default-icon">YouTube Live</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.youtube-live.index') }}">
+        <i class="ph-duotone ph-youtube-logo"></i>
+        <span class="item-name">All Streams</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.youtube-live.create') }}">
+        <i class="ph-duotone ph-plus-circle"></i>
+        <span class="item-name">Add Stream</span>
+    </a>
+</li>
+
+@endcan
+
+@can('manage radio')
+
+<li class="nav-item">
+
+    <a class="nav-link"
+       data-bs-toggle="collapse"
+       href="#radio-menu"
+       role="button">
+
+        <i class="ph-duotone ph-broadcast"></i>
+
+        <span class="item-name">
+            Radio
+        </span>
+
+        <i class="right-icon">
+            <svg width="18" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M7,10L12,15L17,10H7Z">
+                </path>
+            </svg>
+        </i>
+
+    </a>
+
+    <ul class="sub-nav collapse"
+        id="radio-menu">
+
+        <li class="nav-item">
+
+            <a class="nav-link"
+               href="{{ route('admin.radio.index') }}">
+
+                <i class="ph-duotone ph-list"></i>
+
+                <span class="item-name">
+                    All Streams
+                </span>
+
+            </a>
+
+        </li>
+
+        <li class="nav-item">
+
+            <a class="nav-link"
+               href="{{ route('admin.radio.create') }}">
+
+                <i class="ph-duotone ph-plus-circle"></i>
+
+                <span class="item-name">
+                    Add Stream
+                </span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</li>
+
+@endcan
+
+
+@can('manage eyewitness')
+
+<li class="nav-item static-item mt-3 mb-1">
+    <a class="nav-link static-item disabled">
+        <span class="default-icon">Eyewitness News</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.eyewitness.index') }}">
+        <i class="ph-duotone ph-newspaper"></i>
+        <span class="item-name">All Reports</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.eyewitness.trash') }}">
+        <i class="ph-duotone ph-trash"></i>
+        <span class="item-name">Trash</span>
+    </a>
+</li>
+
+@endcan
+
+
                 <!-- ========================= -->
                 <!-- USERS -->
                 <!-- ========================= -->
@@ -136,7 +274,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('user.list') }}">
                         <i class="ph-duotone ph-users"></i>
                         <span class="item-name">Manage Users</span>
                     </a>
@@ -156,33 +294,33 @@
                 <!-- ========================= -->
 
                 @role('super-admin')
-
+<!-- 
                 <li class="nav-item static-item mt-3 mb-1">
                     <a class="nav-link static-item disabled">
                         <span class="default-icon">Roles & Permissions</span>
                     </a>
-                </li>
+                </li> -->
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="ph-duotone ph-shield-check"></i>
                         <span class="item-name">Roles</span>
                     </a>
-                </li>
+                </li> -->
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="ph-duotone ph-lock-key"></i>
                         <span class="item-name">Permissions</span>
                     </a>
-                </li>
+                </li> -->
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="ph-duotone ph-user-gear"></i>
                         <span class="item-name">Assign Permissions</span>
                     </a>
-                </li>
+                </li> -->
 
                 @endrole
 
@@ -247,12 +385,12 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="ph-duotone ph-globe"></i>
                         <span class="item-name">Website Settings</span>
                     </a>
-                </li>
+                </li> -->
 
                 @endhasanyrole
 
@@ -262,32 +400,32 @@
 
                 @role('super-admin')
 
-                <li class="nav-item static-item mt-3 mb-1">
+                <!-- <li class="nav-item static-item mt-3 mb-1">
                     <a class="nav-link static-item disabled">
                         <span class="default-icon">System</span>
                     </a>
-                </li>
+                </li> -->
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.database-backup') }}">
                         <i class="ph-duotone ph-database"></i>
                         <span class="item-name">Database Backup</span>
                     </a>
-                </li>
+                </li> -->
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.activity-logs') }}">
                         <i class="ph-duotone ph-activity"></i>
                         <span class="item-name">Activity Logs</span>
                     </a>
-                </li>
+                </li> -->
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="ph-duotone ph-gear-six"></i>
                         <span class="item-name">System Settings</span>
                     </a>
-                </li>
+                </li> -->
 
                 @endrole
 

@@ -6,11 +6,13 @@ use App\Mail\OtpMail;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Post;
-use App\Models\Category;
+use App\Models\Eyewitness;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use App\Models\LiveNews;
+use App\Models\YoutubeLive;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -167,4 +169,104 @@ class UserController extends Controller
 
     return view('search', compact('posts'));
 }
+
+public function liveNewsShow($slug)
+{
+    $liveNews = LiveNews::where('slug', $slug)
+        ->where('status', 1)
+        ->firstOrFail();
+
+    return view('frontend.live-news', compact('liveNews'));
 }
+
+public function youtubeLiveShow($id)
+{
+    $stream = YoutubeLive::where('status', 1)
+        ->findOrFail($id);
+
+    preg_match('/(?:v=|\/)([0-9A-Za-z_-]{11}).*/', $stream->youtube_url, $matches);
+
+    $videoId = $matches[1] ?? '';
+
+    return view('frontend.youtube-live', compact(
+        'stream',
+        'videoId'
+    ));
+}
+
+public function createEyewitness()
+{
+    return view('user.posts.create');
+}
+
+public function storeEyewitness(Request $request)
+{
+    if (!auth()->check()) {
+
+        return redirect()
+            ->route('login')
+            ->with('error', 'Please login first.');
+    }
+
+    $request->validate([
+
+        'title' => 'required|string|max:255',
+        'content' => 'required',
+        'location' => 'nullable|string',
+        'image' => 'nullable|image|max:2048',
+
+    ]);
+
+    $image = null;
+
+    if ($request->hasFile('image')) {
+
+        $image = $request->file('image')
+            ->store('eyewitness', 'public');
+    }
+
+    Eyewitness::create([
+
+        'user_id' => auth()->id(),
+        'title' => $request->title,
+        'content' => $request->content,
+        'location' => $request->location,
+        'image' => $image,
+        'status' => 'pending',
+
+    ]);
+
+    return redirect()
+        ->back()
+        ->with(
+            'success',
+            'Your eyewitness news has been submitted and is waiting for approval.'
+        );
+}
+
+
+public function eyewitnessNews()
+{
+    $latestEyewitness = Eyewitness::with('user')
+        ->where('status', 'approved')
+        ->latest()
+        ->paginate(12);
+
+    return view(
+        'user.posts.index',
+        compact('latestEyewitness')
+    );
+}
+
+    public function eyewitnessShow($id)
+{
+    $news = Eyewitness::where('status', 'approved')
+        ->findOrFail($id);
+
+    return view(
+        'user.posts.show-eye',
+        compact('news')
+    );
+}
+
+} 
