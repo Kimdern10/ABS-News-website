@@ -210,7 +210,7 @@ body > .page-loader {
     align-items: center;
     justify-content: center;
     z-index: 99999;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 body > .page-loader.hidden {
@@ -690,7 +690,7 @@ window.addEventListener("load", function(){
 
     setTimeout(() => {
         loader.remove();
-    }, 1000);
+    }, 100);
 
 });
 
