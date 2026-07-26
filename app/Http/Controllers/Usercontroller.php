@@ -267,6 +267,7 @@ public function eyewitnessNews()
         'user.posts.show-eye',
         compact('news')
     );
+    
 }
 
 } 

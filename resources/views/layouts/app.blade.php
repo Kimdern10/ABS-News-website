@@ -202,7 +202,6 @@ gtag('config','{{ $globalSeo->google_analytics_id }}');
 
 <style>
 
-body > .page-loader {
     position: fixed;
     inset: 0;
     background: #ffffff;
