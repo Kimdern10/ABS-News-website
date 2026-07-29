@@ -19,7 +19,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Trashed Categories
+     * Trashed Categories 
      */
 public function trash()
 {

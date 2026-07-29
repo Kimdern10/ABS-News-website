@@ -179,10 +179,11 @@ public function liveNewsShow($slug)
     return view('frontend.live-news', compact('liveNews'));
 }
 
-public function youtubeLiveShow($id)
+public function youtubeLiveShow()
 {
     $stream = YoutubeLive::where('status', 1)
-        ->findOrFail($id);
+        ->latest()
+        ->firstOrFail();
 
     preg_match('/(?:v=|\/)([0-9A-Za-z_-]{11}).*/', $stream->youtube_url, $matches);
 

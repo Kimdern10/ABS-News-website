@@ -198,53 +198,64 @@ gtag('config','{{ $globalSeo->google_analytics_id }}');
 
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,800&display=swap" rel="stylesheet">
 
+<script>
+document.documentElement.classList.add('loading');
+</script>
 
-
+<!-- CRITICAL CSS: Prevents "Big Image" flash on refresh -->
 <style>
-
-    position: fixed;
-    inset: 0;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+.page-loader{
+    position:fixed !important;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    min-height:100vh;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2147483647;
+    opacity:1;
+    visibility:visible;
+    transition:opacity .5s ease, visibility .5s ease;
 }
 
-body > .page-loader.hidden {
-    opacity: 0;
-    visibility: hidden;
+.page-loader.hidden{
+    opacity:0;
+    visibility:hidden;
 }
 
-.page-loader-logo {
-    width: 240px;
-    max-width: 85vw;
-    height: auto;
-    animation: pageLoaderPulse 1.5s ease-in-out infinite;
+.page-loader-logo{
+    width:240px;
+    max-width:85vw;
+    height:auto;
+    animation:pageLoaderPulse 1.5s ease-in-out infinite;
 }
 
-
-@keyframes pageLoaderPulse {
-
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: scale(1.08);
-        opacity: .75;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
+@keyframes pageLoaderPulse{
+    0%{ transform:scale(1); opacity:1; }
+    50%{ transform:scale(1.08); opacity:.75; }
+    100%{ transform:scale(1); opacity:1; }
 }
 
+html.loading body > *:not(.page-loader){
+    visibility:hidden !important;
+}
+
+html.loading .body-inner{
+    visibility:hidden !important;
+}
 </style>
+
+<noscript>
+    <style>
+        html.loading body > *:not(.page-loader) { visibility: visible !important; }
+        html.loading .body-inner { visibility: visible !important; }
+        .page-loader { display: none !important; }
+    </style>
+</noscript>
+
 </head>
 <body>
 
@@ -252,7 +263,7 @@ body > .page-loader.hidden {
 <!-- ================= PAGE LOADER ================= -->
 <div class="page-loader">
 
-    <img src="{{ asset('assets/images/ABS.png') }}" 
+    <img src="{{ asset('assets/images/ABSloader.png') }}" 
          alt="ABS Radio Television"
          class="page-loader-logo">
 
@@ -325,7 +336,14 @@ body > .page-loader.hidden {
 </div>
 
 
-  <style>/* ================== SMOOTH SLIDING BREAKING NEWS ================== */
+
+<style>
+html.loaded body > *{
+    visibility:visible !important;
+}
+</style>
+
+  <style>
 
 #radioPlayer{
     position:fixed;
@@ -416,14 +434,7 @@ body > .page-loader.hidden {
     z-index:999999;
 }
 
-@media(max-width:768px){
 
-    .floating-player{
-        width:95%;
-        right:2.5%;
-    }
-
-}
 
 /* ================= BREAKING NEWS ================= */
 
@@ -469,104 +480,6 @@ body > .page-loader.hidden {
 }
 
 
-/* ================= PAGE LOADER ================= */
-
-.page-loader {
-
-    position: fixed !important;
-
-    top: 0 !important;
-    left: 0 !important;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    min-height: 100vh !important;
-
-    background: #ffffff !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-    justify-content: center !important;
-
-    z-index: 2147483647 !important;
-
-    opacity: 1;
-    visibility: visible;
-
-    overflow: hidden;
-
-    transition: opacity .5s ease, visibility .5s ease;
-
-}
-
-
-/* hide loader */
-
-.page-loader.hidden {
-
-    opacity: 0 !important;
-    visibility: hidden !important;
-
-}
-
-
-/* ABS LOGO */
-
-.page-loader-logo {
-
-    width: 240px;
-
-    max-width: 85vw;
-
-    height: auto;
-
-    display: block;
-
-    animation: pageLoaderPulse 1.5s ease-in-out infinite;
-
-}
-
-
-
-@keyframes pageLoaderPulse {
-
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: scale(1.08);
-        opacity: .75;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-}
-
-
-
-/* ticker animation */
-
-@keyframes slideLeft {
-
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(-50%);
-    }
-
-}
-
-
-
 /* pause ticker */
 
 .breaking-news:hover .ticker {
@@ -575,6 +488,25 @@ body > .page-loader.hidden {
 
 }
 
+/* ================= PAGE LOADER ================= */
+
+/* MOVED TO HEAD TO PREVENT FLASH */
+
+@keyframes slideLeft {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* PREVENT CONTENT FLASH */
+
+html.loaded .body-inner{
+    visibility:visible !important;
+}
 
 
 /* mobile */
@@ -596,6 +528,13 @@ body > .page-loader.hidden {
     .ticker-content a{
         font-size:.9rem;
         margin-right:30px;
+    }
+
+    
+
+    .floating-player{
+        width:95%;
+        right:2.5%;
     }
 
 
@@ -678,97 +617,131 @@ body > .page-loader.hidden {
     LIVE TV
 
 </div>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SKV4S8RDYL"></script>
 
 <script>
+window.dataLayer = window.dataLayer || [];
 
-window.addEventListener("load", function(){
-
-    const loader = document.querySelector(".page-loader");
-
-    loader.classList.add("hidden");
-
-    setTimeout(() => {
-        loader.remove();
-    }, 100);
-
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    if (localStorage.getItem("darkMode") === "enabled") {
-        document.body.classList.add("dark-mode");
-    }
-
-});
-
-function toggleDarkMode() {
-
-    document.body.classList.toggle("dark-mode");
-
-    if (document.body.classList.contains("dark-mode")) {
-        localStorage.setItem("darkMode", "enabled");
-    } else {
-        localStorage.setItem("darkMode", "disabled");
-    }
+function gtag(){
+    dataLayer.push(arguments);
 }
 
-const radioBtn = document.getElementById('radioToggle');
+gtag('js', new Date());
+gtag('config', 'G-SKV4S8RDYL');
+
+
+/* ==========================================
+   PAGE LOADER + DARK MODE
+========================================== */
+
+window.addEventListener('load', function () {
+
+    document.documentElement.classList.remove('loading');
+    document.documentElement.classList.add('loaded');
+
+    const loader = document.querySelector('.page-loader');
+
+    if(loader){
+
+        loader.classList.add('hidden');
+
+        setTimeout(function(){
+
+            loader.remove();
+
+        }, 500);
+
+    }
+
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    if(localStorage.getItem('darkMode') === 'enabled'){
+        document.body.classList.add('dark-mode');
+    }
+
+});
+
+
+function toggleDarkMode(){
+
+    document.body.classList.toggle('dark-mode');
+
+    if(document.body.classList.contains('dark-mode')){
+        localStorage.setItem('darkMode', 'enabled');
+    }else{
+        localStorage.setItem('darkMode', 'disabled');
+    }
+
+}
+
+
+/* ==========================================
+   RADIO PLAYER
+========================================== */
+
+const radioBtn       = document.getElementById('radioToggle');
 const mobileRadioBtn = document.getElementById('mobileRadioToggle');
+const radioPlayer    = document.getElementById('radioPlayer');
+const closeRadio     = document.getElementById('closeRadio');
 
-const radioPlayer = document.getElementById('radioPlayer');
-const closeRadio = document.getElementById('closeRadio');
-
-function openRadio(e) {
+function openRadio(e){
 
     e.preventDefault();
 
-    radioPlayer.style.display = 'block';
+    if(radioPlayer){
+        radioPlayer.style.display = 'block';
+    }
 
 }
 
-if (radioBtn) {
-
+if(radioBtn){
     radioBtn.addEventListener('click', openRadio);
-
 }
 
-if (mobileRadioBtn) {
-
+if(mobileRadioBtn){
     mobileRadioBtn.addEventListener('click', openRadio);
-
 }
 
-if (closeRadio) {
+if(closeRadio){
 
-    closeRadio.addEventListener('click', function () {
+    closeRadio.addEventListener('click', function(){
 
         radioPlayer.style.display = 'none';
 
     });
 
 }
+
+
+/* ==========================================
+   LIVE TV PLAYER
+========================================== */
+
 const youtubeUrl = "{{ $youtubeLive?->youtube_url ?? '' }}";
 
-const openBtn = document.getElementById('openLivePlayer');
-const player = document.getElementById('floatingPlayer');
-const frame = document.getElementById('liveFrame');
-const restore = document.getElementById('restorePlayer');
-const minimizeBtn = document.getElementById('minimizePlayer');
-const closeBtn = document.getElementById('closePlayer');
+const openBtn      = document.getElementById('openLivePlayer');
+const player       = document.getElementById('floatingPlayer');
+const frame        = document.getElementById('liveFrame');
+const restore      = document.getElementById('restorePlayer');
+const minimizeBtn  = document.getElementById('minimizePlayer');
+const closeBtn     = document.getElementById('closePlayer');
 
-if (openBtn) {
+if(openBtn){
 
-    openBtn.addEventListener('click', function () {
+    openBtn.addEventListener('click', function(){
 
-        if (!youtubeUrl) {
+        if(!youtubeUrl){
             alert('No Live Stream Available');
             return;
         }
 
         let embedUrl = youtubeUrl;
 
-        if (youtubeUrl.includes('watch?v=')) {
+        if(youtubeUrl.includes('watch?v=')){
 
             const videoId = youtubeUrl.split('v=')[1].split('&')[0];
 
@@ -784,9 +757,9 @@ if (openBtn) {
 
 }
 
-if (minimizeBtn) {
+if(minimizeBtn){
 
-    minimizeBtn.addEventListener('click', function () {
+    minimizeBtn.addEventListener('click', function(){
 
         player.style.display = 'none';
         restore.style.display = 'block';
@@ -795,9 +768,9 @@ if (minimizeBtn) {
 
 }
 
-if (restore) {
+if(restore){
 
-    restore.addEventListener('click', function () {
+    restore.addEventListener('click', function(){
 
         player.style.display = 'block';
         restore.style.display = 'none';
@@ -806,9 +779,9 @@ if (restore) {
 
 }
 
-if (closeBtn) {
+if(closeBtn){
 
-    closeBtn.addEventListener('click', function () {
+    closeBtn.addEventListener('click', function(){
 
         player.style.display = 'none';
         restore.style.display = 'none';
@@ -817,10 +790,9 @@ if (closeBtn) {
     });
 
 }
-
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
-<!-- Mirrored from utouchdesign.com/themes/envato/altroznews/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Jul 2026 14:46:32 GMT -->
 </html>

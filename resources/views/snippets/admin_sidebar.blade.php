@@ -3,12 +3,12 @@
     data-sidebar="responsive"
     style="height:100vh;overflow-y:auto;padding-bottom:120px;">
 
-    <div class="sidebar-header d-flex align-items-center justify-content-start position-relative">
-        <div class="logo pull-left">
+    <div class="sidebar-header d-flex align-items-center justify-content-center position-relative">
+        <div class="logo pull-left" style="margin-top: 15px;">
             <a href="/" class="img-responsive">
-                <img src="{{ asset('assets/images/ABS.News.p') }}"
+                <img src="{{ asset('assets/images/ABS.png') }}"
                      alt="ABS News Logo"
-                     style="width:180px;height:auto;">
+                     style="width:80px;height:auto;">
             </a>
         </div>
 
@@ -58,7 +58,7 @@
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('dashboard') }}">
                         <i class="ph-duotone ph-gauge"></i>
                         <span class="item-name">Dashboard</span>
                     </a>
@@ -437,3 +437,4 @@
     </div>
 
 </aside>
+

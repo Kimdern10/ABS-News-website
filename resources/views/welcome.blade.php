@@ -1903,7 +1903,36 @@ body.dark-mode .utf_newsletter_introtext{
      font-weight: 400;
      margin: 12px 0;
    }
+/* Mobile Tabs Fix */
+.utf_featured_tab .nav-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+    
+}
 
+.utf_featured_tab .nav-tabs .nav-item {
+    flex: 0 0 auto;
+    
+}
+
+.utf_featured_tab .nav-tabs .nav-link {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 4px;
+    
+}
+
+.utf_featured_tab .nav-tabs .nav-link.active{
+      color:#fff;
+    background: #0d6efd;
+}
+
+.utf_featured_tab .nav-tabs .nav-link.hover{
+  color:#fff;
+    background: #0d6efd;
+}
      
    }
 
@@ -2049,6 +2078,38 @@ body.dark-mode .utf_newsletter_introtext{
      .post-float .utf_post_content {
         margin-top: 15px !important;
     }
+
+    /* Mobile Tabs Fix */
+.utf_featured_tab .nav-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+    
+}
+
+.utf_featured_tab .nav-tabs .nav-item {
+    flex: 0 0 auto;
+    
+}
+
+.utf_featured_tab .nav-tabs .nav-link {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 4px;
+    
+}
+
+.utf_featured_tab .nav-tabs .nav-link.active{
+      color:#fff;
+    background: #0d6efd;
+}
+
+.utf_featured_tab .nav-tabs .nav-link.hover{
+  color:#fff;
+    background: #0d6efd;
+}
+    
    }
 
    /* ==================== EXTRA SMALL MOBILE (< 400px) ==================== */
@@ -2070,6 +2131,38 @@ body.dark-mode .utf_newsletter_introtext{
        min-width: 78px;
        height: 80px;
      }
+
+     /* Mobile Tabs Fix */
+.utf_featured_tab .nav-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+    
+}
+
+.utf_featured_tab .nav-tabs .nav-item {
+    flex: 0 0 auto;
+    
+}
+
+.utf_featured_tab .nav-tabs .nav-link {
+    padding: 6px 14px;
+    font-size: 10px;
+    border-radius: 4px;
+    
+}
+
+.utf_featured_tab .nav-tabs .nav-link.active{
+      color:#fff;
+    background: #0d6efd;
+}
+
+.utf_featured_tab .nav-tabs .nav-link.hover{
+  color:#fff;
+    background: #0d6efd;
+}
+    
    }
 
    /* ==================== OWL CAROUSEL RESPONSIVE FIXES ==================== */

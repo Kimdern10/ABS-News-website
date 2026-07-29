@@ -498,7 +498,6 @@
   }
 
   /* Profile Icon */
-
   .profile-btn {
     text-decoration: none !important;
     font-size: 18px;
@@ -841,17 +840,17 @@
       left: 10px;
       top: 50%;
       transform: translateY(-50%);
-      z-index: 20;
+      z-index: 2000; /* FIXED: Increased z-index */
       margin: 0;
     }
 
     /* Logo - CENTER */
     .logo {
       position: absolute;
-      left: 40%;
+      left: 50%;
       top: 50%;
       transform: translateX(-50%) translateY(-50%);
-      z-index: 15;
+      z-index: 1500; /* FIXED: Increased z-index */
       margin: 0;
       margin-top: 5px;
     }
@@ -869,7 +868,7 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      z-index: 15;
+      z-index: 2000; /* FIXED: Higher z-index to stay above menu */
     }
 
     /* Hide radio icon on mobile */
@@ -900,7 +899,7 @@
       max-width: 100vw !important;
 
       background: #fff;
-      z-index: 99999;
+      z-index: 1000; /* FIXED: Lower than header icons */
 
       padding: 15px;
       border-top: 1px solid #eee;
@@ -930,10 +929,6 @@
     .live-news-bar {
       position: relative;
       z-index: 1;
-    }
-
-    .navbar-collapse {
-      z-index: 99999 !important;
     }
 
     .utf_main_nav_area .container {
@@ -1109,7 +1104,7 @@
     .navbar-nav .nav-link {
       width: 100% !important;
       /* display: block !important; */
-      white-space: nowrap !important;
+      white-space: normal !important; /* FIXED: Allow wrapping to prevent overflow */
     }
 
   }

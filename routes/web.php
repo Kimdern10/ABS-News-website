@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\EyewitnessController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BackupController;
 
 /*
@@ -381,6 +382,10 @@ Route::get('/eyewitness/restore/{id}',
 Route::get('/eyewitness/trash',
 [EyewitnessController::class,'trash'])
 ->name('admin.eyewitness.trash');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+
 
 });
 

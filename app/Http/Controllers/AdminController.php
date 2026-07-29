@@ -357,13 +357,22 @@ public function youtubeLiveUpdate(Request $request, $id)
     if ($request->hasFile('thumbnail')) {
 
         if ($stream->thumbnail) {
-
-            Storage::disk('public')
-                ->delete($stream->thumbnail);
+            Storage::disk('public')->delete($stream->thumbnail);
         }
 
         $stream->thumbnail = $request->file('thumbnail')
             ->store('youtube-live', 'public');
+    }
+
+    // If this stream is being activated,
+    // deactivate all other streams first
+    if ($request->has('status')) {
+
+        YoutubeLive::where('id', '!=', $stream->id)
+            ->update([
+                'status' => 0,
+                'is_live' => 0
+            ]);
     }
 
     $stream->title = $request->title;
