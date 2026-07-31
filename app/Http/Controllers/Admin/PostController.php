@@ -349,7 +349,7 @@ public function headlines()
         $message .= route('posts.show', $post->slug) . "\n\n";
     }
 
-    $message .= "Visit www.absradiotelevision.com for more news stories.";
+    $message .= "Visit www.absradiotv.com for more news stories.";
 
     return view('admin.news.headlines', compact('message'));
 }

@@ -190,7 +190,7 @@
           @php($user = Auth::user())
 
           @if($user->Userprofile && $user->Userprofile->profile_picture)
-          <img src="{{ asset('Userprofile/' . $user->Userprofile->profile_picture) }}"
+          <img src="{{ asset('UserProfile/' . $user->Userprofile->profile_picture) }}"
             alt="{{ $user->name }}"
             class="rounded-circle"
             style="width:38px;height:38px;object-fit:cover;border:2px solid #fff;">
